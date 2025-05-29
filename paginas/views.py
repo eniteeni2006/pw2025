@@ -5,7 +5,9 @@ from .models import Post, Categoria, Comentario, Avaliação
 
 
 class IndexView(TemplateView):
+    model = Post
     template_name = 'paginas/index.html'
+    context_object_name = 'post_list'
 
 class SobreView(TemplateView):
     template_name = 'paginas/sobre.html'
