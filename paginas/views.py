@@ -19,10 +19,6 @@ class ResumoCreateView(CreateView):
     template_name = 'formulario.html'
     success_url = reverse_lazy('inicio')
 
-class ResumoDetailView(DetailView):
-    model = Resumo
-    template_name = 'detalhe.html'
-
 
 
 class AbstractCreateView(CreateView):

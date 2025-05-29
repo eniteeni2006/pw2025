@@ -1,41 +1,342 @@
-{% load static %}
-
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    {% block titulo  %}
-    <title>Página Inicial</title>
-    {% endblock  %}
-
-
-    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Combate ao Sedentarismo</title>
+  <link rel="stylesheet" href="css/estilo.css" />
 </head>
 <body>
+  <header>
+    <div class="hamburger" id="hamburgerBtn" aria-label="Abrir menu" role="button" tabindex="0">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <h1>Combate ao Sedentarismo: O Papel da Atividade Física na Promoção da Saúde</h1>
+  </header>
 
-    <h4>Menu Superior</h4>
-    <ul>
-        <li>
-            <a href="{% url "inicio" %}"> Início</a>
-        </li>
-        <li>
-            <a href="{% url "sobre" %}"> Sobre nós</a>
-        </li>
-    </ul>
+  <div class="container">
+    <nav id="sidebar">
+      <ul>
+        <li><a href="#resumo">Resumo / Abstract</a></li>
+        <li><a href="#introducao">Introdução</a></li>
+        <li><a href="#objetivos">Objetivos</a></li>
+        <li><a href="#justificativa">Justificativa</a></li>
+        <li><a href="#revisao">Revisão Teórica</a></li>
+        <li><a href="#metodologia">Metodologia</a></li>
+        <li><a href="#cronograma">Cronograma</a></li>
+        <li><a href="#bibliografia">Bibliografia</a></li>
+        <li><a href="#sobre">Sobre Nós</a></li>
+      </ul>
+    </nav>
 
-    {%  block conteudo   %}
-    <h3>Página inicial</h3>
-   
+    <main id="mainContent">
+      <section id="resumo" class="card">
+        <h2 class="accordion-header">Resumo / Abstract</h2>
+        <div class="accordion-content">
+          <p>Este trabalho tem como foco principal destacar a importância de combater o sedentarismo
+e mostrar como a prática regular de atividades físicas pode melhorar a saúde e a
+qualidade de vida. A pesquisa busca entender os impactos do comportamento sedentário
+tanto na saúde física quanto mental, além de apresentar os benefícios que o exercício
+pode trazer, com base em dados e estudos científicos. O trabalho também propõe
+estratégias acessíveis para ajudar as pessoas a incluírem a atividade física no dia a dia e,
+como resultado prático, desenvolve um site com todas as informações levantadas. A
+justificativa do projeto se apoia no crescimento preocupante do sedentarismo,
+impulsionado por rotinas modernas que incentivam a inatividade, o que contribui para o
+aumento de doenças como obesidade, diabetes, hipertensão e depressão. Por isso, é
+essencial informar e conscientizar a população sobre a importância de um estilo de vida
+mais ativo. A metodologia envolve uma pesquisa exploratória e qualitativa, com revisão
+bibliográfica e aplicação de questionários para entender os hábitos das pessoas em
+relação à atividade física e sedentarismo. Com isso, o trabalho busca não só analisar o
+tema, mas também promover a reflexão e incentivar mudanças reais nos hábitos da
+população.
+Palavras-chave: Sedentarismo, atividade física, qualidade de vida, saúde.</p><br>
+<p>This work focuses on highlighting the importance of fighting sedentary behavior and
+showing how regular physical activity can improve health and quality of life. The
+research aims to understand the impact of a sedentary lifestyle on both physical and
+mental health, while also presenting the benefits of exercise, supported by scientific data
+and studies. It also proposes accessible strategies to help people incorporate physical
+activity into their daily routines and, as a practical outcome, develops a website to share
+the gathered information. The project is justified by the worrying rise in sedentary habits,
+driven by modern lifestyles that promote inactivity, contributing to an increase in chronic
+diseases such as obesity, type 2 diabetes, hypertension, and depression. Therefore, raising
+awareness about the importance of an active lifestyle is essential. The methodology
+involves exploratory and qualitative research, including a literature review and
+questionnaires aimed at students and/or working adults, with both objective and
+subjective questions about their physical activity habits, sedentary behavior, and
 
-    <p>Bem vindos a página inicial de Programação Web</p>
+perceptions of health and well-being. This approach allows the study to combine
+theoretical foundations with real-life perspectives, enriching the analysis and conclusions.
+Keywords:Sedentary behavior, physical activity, quality of life, health.</p>
+        </div>
+      </section>
 
-     {% endblock %}
-     <p>
-        Desenvolvido por Emanuely Niza
-     </p>
-    
+      <section id="introducao" class="card">
+        <h2 class="accordion-header">Introdução</h2>
+        <div class="accordion-content">
+          <p>Pretendemos abordar a importância da interrupção do comportamento sedentário,
+e mostrar os danos que o sedentarismo pode causar em nossas vidas, e com isso mostrar o
+benefício de praticar atividades fisicas.</p>
+        </div>
+      </section>
+
+      <section id="objetivos" class="card">
+        <h2 class="accordion-header">Objetivos</h2>
+        <div class="accordion-content">
+          <p>O presente trabalho tem como objetivo geral analisar a importância da atividade física
+como estratégia fundamental no combate ao sedentarismo e sua contribuição para a
+promoção da saúde e qualidade de vida.
+De forma mais detalhada, busca-se como objetivos específicos: compreender os
+impactos do comportamento sedentário na saúde física e mental; identificar os principais
+benefícios fisiológicos e psicológicos proporcionados pela prática regular de exercícios;
+apresentar dados e estudos científicos que reforcem a correlação entre sedentarismo e o
+aumento de doenças crônicas; propor estratégias acessíveis e eficazes para a inclusão da
+atividade física na rotina da população; e, por fim, criar um site que apresente as
+informações contidas nesta pesquisa, comentando os resultados obtidos.</p>
+        </div>
+      </section>
+
+      <section id="justificativa" class="card">
+        <h2 class="accordion-header">Justificativa</h2>
+        <div class="accordion-content">
+          <p>O crescente aumento dos índices de sedentarismo tem se tornado uma das principais
+preocupações em saúde pública, especialmente em um contexto onde o estilo de vida
+moderno favorece longos períodos de inatividade física, seja por motivos ocupacionais,
+acadêmicos ou de lazer. Diversos estudos apontam o sedentarismo como fator de risco
+para o desenvolvimento de doenças crônicas não transmissíveis, como obesidade,
+diabetes tipo 2, hipertensão e depressão. Diante disso, torna-se essencial compreender e
+divulgar a relevância da atividade física regular como instrumento eficaz na promoção da
+saúde, prevenção de enfermidades e melhoria da qualidade de vida. Este trabalho
+
+justifica-se pela necessidade de sensibilizar a população — em especial jovens e adultos
+— sobre os malefícios do comportamento sedentário e os inúmeros benefícios físicos,
+mentais e sociais proporcionados por uma rotina ativa. Além disso, pretende-se contribuir
+para a reflexão e construção de estratégias práticas e acessíveis que estimulem a mudança
+de hábitos, promovendo assim uma sociedade mais saudável e consciente.</p>
+        </div>
+      </section>
+
+      <section id="revisao" class="card">
+        <h2 class="accordion-header">Revisão Teórica</h2>
+        <div class="accordion-content">
+          <p>Conforme destaca a Organização Mundial da Saúde (OMS), o sedentarismo tem
+alcançado níveis preocupantes em todo o mundo. O que antes era visto apenas como uma
+questão estética, agora é reconhecido como um sério problema de saúde pública, sendo
+até classificado como uma epidemia global. A ausência de atividade física representa um
+risco real à vida, já que impede as pessoas de manterem hábitos saudáveis. Ainda
+segundo a OMS, o Brasil é o país mais sedentário da América Latina e está entre os cinco
+com maior índice de sedentarismo no planeta.
+
+Segundo Santos et al. (2019), um dos principais fatores que leva crianças e adolescentes a
+evitarem práticas esportivas ou qualquer atividade física durante o período escolar é o uso
+excessivo de tecnologias como:
+
+Celulares
+
+Video games
+
+Computadores
+
+Televisores, entre outros
+
+Com isso, a tendência é que os jovens passem a maior parte do tempo diante das telas,
+deixando de se movimentar e praticar exercícios.
+
+Correa e Antunes (2013) também alertam para esse aumento do sedentarismo, que vem
+sendo impulsionado pelo avanço tecnológico. À medida que as pessoas se tornam cada
+vez mais dependentes de dispositivos eletrônicos, acabam deixando a prática de
+atividades físicas de lado, levando a uma rotina mais parada e sem movimento. Em
+muitos casos, as aulas de Educação Física são o único momento da semana em que
+crianças e adolescentes entram em contato com o exercício físico. Contudo, como aponta
+Kiessler (2015), essas aulas vêm perdendo o apelo entre os estudantes, seja por
+desconhecimento da importância da atividade física ou da sua relevância para a saúde
+futura.
+
+Além disso, o sedentarismo está relacionado a uma série de doenças como hipertensão,
+diabetes e problemas cardíacos, mas a que mais se destaca é a obesidade. Trata-se de uma
+doença crônica caracterizada pelo acúmulo excessivo de gordura corporal, o que pode
+afetar negativamente a vida social, emocional e física da pessoa, conduzindo a outros
+distúrbios (SOUZA et al., 2015). Segundo Santos e Lemes (2017), a obesidade é a quinta
+maior causa de morte no mundo, sendo superada apenas por outros fatores como a
+inatividade física. Caso hábitos mais ativos fossem inseridos na rotina da população,
+poderiam ser evitados não só a obesidade, mas também outros problemas como a
+hipertensão, o tabagismo e altos níveis de glicose no sangue.
+
+Dessa forma, o exercício físico é considerado a principal forma de combater e prevenir
+essas doenças. Além disso, cada vez mais estudos científicos mostram que o
+sedentarismo não está só ligado à obesidade e ao diabetes, mas também ao câncer. Um
+artigo publicado no periódico Cadernos de Saúde Pública apontou que 72,5% das pessoas
+diagnosticadas com câncer no Brasil têm um estilo de vida sedentário, sendo esse quadro
+mais comum entre mulheres de 40 a 59 anos e homens com mais de 60.
+
+O sedentarismo, somado à obesidade, aumenta bastante o risco de desenvolver diversos
+tipos de câncer. De acordo com o Instituto Vencer o Câncer, os dados são alarmantes:
+
+50% dos casos de câncer de endométrio
+
+37% dos casos de câncer de esôfago
+
+25% dos cânceres de cólon
+
+20% dos casos de câncer de mama
+
+Diante disso, é essencial que as escolas adotem medidas eficazes para combater o
+sedentarismo. Isso pode ser feito por meio de atividades e projetos educativos diários,
+que expliquem aos alunos os benefícios da prática de exercícios físicos e os riscos de uma
+alimentação inadequada. Além disso, é importante que haja uma fiscalização da merenda
+escolar e, se possível, o acompanhamento da saúde física dos alunos durante as aulas
+(SANTOS; SERRA; PEREIRA, 2019).
+
+De acordo com o IBGE (2019), apenas 29,9% das pessoas acima de 18 anos atingem o
+nível recomendado de atividade física. O número de indivíduos considerados pouco
+ativos chega a 40,4%. Já entre os adolescentes de 13 a 17 anos, a Pesquisa Nacional de
+Saúde do Escolar revelou que 34% fazem exercícios pelo tempo necessário e 3,8% são
+insuficientemente ativos. Dados mais recentes da Sesa, de 2022, mostram que 70,2% das
+mulheres adultas que fizeram exames em unidades de saúde da atenção primária estavam
+acima do peso. Entre elas, 37,3% apresentavam obesidade — o que pode aumentar a
+ocorrência de doenças como diabetes e problemas cardiovasculares.
+
+“Quando a atividade física é incentivada e se torna um hábito, são inúmeros os benefícios
+para a saúde. Mover-se mais e permanecer menos em comportamento sedentário traz
+enormes benefícios para todos, independentemente da idade, sexo, raça, etnia ou nível de
+condicionamento físico”, alerta o secretário da Saúde, César Neves.
+
+Para incentivar a inclusão da atividade física no cotidiano, a Sesa sugere:
+
+Não depender apenas da academia. Caminhar para o trabalho, fazer tarefas de casa ou
+preferir escadas ao elevador são boas opções.
+
+Reduzir o tempo parado. Fazer pausas de cinco minutos a cada hora para alongar ou
+caminhar já ajuda.
+
+Superar os obstáculos iniciais. Com o tempo, a prática vira hábito. É importante respeitar
+os próprios limites e buscar uma atividade que dê prazer.
+
+Ter companhia. Fazer exercícios com amigos, colegas ou familiares pode tornar a prática
+mais agradável e motivadora.
+
+Hoje em dia, exercitar-se virou uma necessidade, mas no passado isso era parte natural do
+dia a dia. Para caçar, plantar, cozinhar ou limpar, as pessoas precisavam se mover o
+tempo todo. Até mesmo a sobrevivência dependia disso. No entanto, com a modernização
+e o avanço da tecnologia, esse hábito foi se perdendo.
+
+“É consenso que os exercícios são coadjuvantes na prevenção e no tratamento de várias
+doenças, mas alguns médicos ainda não conseguem orientar a atividade de forma
+individualizada”, diz o fisiologista Turíbio Leite de Barros, da Unifesp. O tipo e a
+intensidade dos exercícios precisam ser adaptados para cada pessoa. “Ouvir apenas um
+&#39;você precisa se exercitar&#39; não é suficiente. Uma carga leve demais não traz resultados e,
+se for muito intensa, pode causar lesões, problemas nas articulações ou até levar à morte
+súbita”, complementa Lazzoli.
+
+Além de todos os benefícios já citados, manter-se ativo pode até reduzir o uso de
+medicamentos. Mulheres idosas que praticam exercícios com frequência precisam, em
+média, de 34% menos remédios que aquelas que não se exercitam, segundo um estudo da
+Unifesp. Isso reforça a ideia de que os exercícios funcionam como verdadeiros
+medicamentos — tanto para prevenir quanto para tratar doenças — e, assim como os
+remédios, também precisam de uma &quot;prescrição&quot; correta.
+
+Esse assunto foi debatido durante o 22º Congresso Brasileiro de Medicina do Exercício e
+do Esporte, realizado em Curitiba. A pesquisa apresentada, feita pela Unifesp em parceria
+com o Celafiscs (Centro de Estudos e Laboratório de Aptidão Física de São Caetano do
+Sul), acompanhou 271 mulheres acima de 60 anos. Muitas já tinham doenças crônicas
+como hipertensão e diabetes. As mulheres consideradas ativas faziam mais de 150
+minutos de atividade física por semana, enquanto as sedentárias não alcançavam nem dez
+minutos.
+
+A pesquisa também apontou vários benefícios da caminhada para idosos:
+
+Saúde mental: ajuda a reduzir ansiedade e depressão. Caminhar em grupo também
+melhora o convívio social.
+
+Menos medicamentos: quem caminha regularmente pode reduzir pela metade o uso de
+remédios para diabetes, pressão alta e colesterol.
+
+Cérebro: o exercício estimula o crescimento de vasos sanguíneos e neurônios, diminuindo
+em até 73% o risco de demência vascular.
+
+Câncer de mama: mulheres que caminham com frequência têm 23% menos risco de
+desenvolver essa doença.
+
+Coração: ajuda a equilibrar os níveis de colesterol, aumentando o bom (HDL) e
+reduzindo o ruim (LDL), o que diminui o risco de doenças cardíacas.
+
+Vesícula: reduz a chance de formação de pedras na vesícula.
+
+Mesmo que não seja possível impedir totalmente o envelhecimento ou o declínio das
+funções mentais, os exercícios físicos têm um impacto significativo na saúde do cérebro.
+E com o número de idosos aumentando, promover uma vida mais ativa e saudável é
+
+importante não só para a qualidade de vida, mas também para reduzir os gastos públicos
+com cuidados de longo prazo.</p>
+        </div>
+      </section>
+
+      <section id="metodologia" class="card">
+        <h2 class="accordion-header">Metodologia</h2>
+        <div class="accordion-content">
+          <p>Este trabalho será desenvolvido por meio de uma pesquisa do tipo exploratória e
+qualitativa, com o objetivo de compreender a relação entre o sedentarismo e a saúde,
+bem como os benefícios da prática de atividade física regular. Inicialmente, será realizada
+uma pesquisa bibliográfica, utilizando livros, artigos científicos, publicações
+acadêmicas e materiais disponibilizados por órgãos de saúde como a Organização
+Mundial da Saúde (OMS), o Ministério da Saúde e outras instituições especializadas na
+área.
+Além disso, será aplicada uma pesquisa de campo com caráter descritivo, por meio de
+questionários online ou presenciais direcionados a estudantes e/ou trabalhadores adultos,
+com perguntas objetivas e subjetivas sobre seus hábitos de atividade física, tempo de
+comportamento sedentário e percepção sobre saúde e bem-estar. Os dados obtidos serão
+analisados de forma qualitativa, buscando identificar padrões, dificuldades e
+oportunidades relacionadas à adoção de um estilo de vida mais ativo.
+Essa metodologia permitirá uma abordagem ampla do tema, unindo a fundamentação
+teórica com percepções reais da população, enriquecendo a análise e as conclusões do
+trabalho.</p>
+        </div>
+      </section>
+
+      <section id="cronograma" class="card">
+        <h2 class="accordion-header">Cronograma</h2>
+        <div class="accordion-content">
+          <p>Adicione um planejamento temporal do projeto (pode ser uma tabela com meses e atividades).</p>
+        </div>
+      </section>
+
+      <section id="bibliografia" class="card">
+        <h2 class="accordion-header">Bibliografia</h2>
+        <div class="accordion-content">
+          <p>Liste as fontes utilizadas, autores, artigos e livros citados no projeto.</p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Menu do botão hamburguer
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    hamburgerBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+      mainContent.classList.toggle('shifted');
+    });
+
+    hamburgerBtn.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        hamburgerBtn.click();
+      }
+    });
+
+    // Abre e fecha dos cards
+    document.querySelectorAll('.accordion-header').forEach(header => {
+      header.addEventListener('click', () => {
+        const content = header.nextElementSibling;
+
+        header.classList.toggle('active');
+        content.classList.toggle('show');
+      });
+    });
+  </script>
 </body>
 </html>

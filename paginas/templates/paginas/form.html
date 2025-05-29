@@ -1,0 +1,30 @@
+{% extends "paginas/index.html" %}
+
+{% load static %}
+
+{% block conteudo %}
+<h3>{{titulo}}</h3>
+
+<p>* Campos obrigatórios</p>
+
+<form action="" method="post">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    {% if botao == "Excluir" %}
+    <h4>
+        Deseja excluir o registro: 
+        <span style="color: red;">
+            {{ object }} 
+        </span>
+    </h4>
+    {% endif %}
+
+    <button type="submit">{{ botao }}</button>
+
+</form>
+
+
+{% endblock %}
