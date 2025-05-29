@@ -1,6 +1,8 @@
-from django.views.generic import TemplateView, DetailView, CreateView, ListView
+from datetime import date
+from django.views.generic import TemplateView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import (Post, Categoria, Comentario, Avaliação, User)
+from .models import Post, Categoria, Comentario, Avaliação
+
 
 class IndexView(TemplateView):
     template_name = 'paginas/index.html'
@@ -9,48 +11,125 @@ class SobreView(TemplateView):
     template_name = 'paginas/sobre.html'
 
 
-
-class PostCreate(CreateView):
-    model = Post
-    template_name = 'paginas/form.html'
-    fields = ['título, data, texto']
-    success_url = reverse_lazy('index')
-    extra_context = {
-        'titulo': 'Post',
-        'data': date.today().strftime('%d/%m/%Y'),
-        'texto' : 'Digite Aqui...',
-        'botao': 'Enviar Post' 
-    }
+#########################   CREATE   ##################################
 
 class CategoriaCreate(CreateView):
     model = Categoria
     template_name = 'paginas/form.html'
     fields = ['nome']
     success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Nova Categoria',
+        'botao': 'Criar Categoria',
+    }
+
+class PostCreate(CreateView):
+    model = Post
+    template_name = 'paginas/form.html'
+    fields = ['titulo', 'data', 'texto', 'categoria', 'autor']
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Novo Post',
+        'botao': 'Publicar Post'
+    }
+
+class AvaliacaoCreate(CreateView):
+    model = Avaliação
+    template_name = 'paginas/form.html'
+    fields = ['autor', 'nota', 'post']
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Nova Avaliação',
+        'botao': 'Avaliar'
+    }
+
+class ComentarioCreate(CreateView):
+    model = Comentario
+    template_name = 'paginas/form.html'
+    fields = ['autor', 'comentario', 'post']
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Novo Comentário',
+        'botao': 'Publicar Comentário'
+    }
 
 
+#########################   UPDATE   ##################################
 
-class AbstractCreateView(CreateView):
-    model = Abstract
-    fields = ['conteudo']
-    template_name = 'formulario.html'
-    success_url = reverse_lazy('inicio')
+class CategoriaUpdate(UpdateView):
+    model = Categoria
+    template_name = 'paginas/form.html'
+    fields = ['nome']
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Editar Categoria',
+        'botao': 'Atualizar Categoria',
+    }
 
-class AbstractDetailView(DetailView):
-    model = Abstract
-    template_name = 'detalhe.html'
+class PostUpdate(UpdateView):
+    model = Post
+    template_name = 'paginas/form.html'
+    fields = ['titulo', 'data', 'texto', 'categoria', 'autor']
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Editar Post',
+        'botao': 'Atualizar Post'
+    }
 
-class IntroducaoCreateView(CreateView):
-    model = Introducao
-    fields = ['conteudo']
-    template_name = 'formulario.html'
-    success_url = reverse_lazy('inicio')
+class AvaliacaoUpdate(UpdateView):
+    model = Avaliação
+    template_name = 'paginas/form.html'
+    fields = ['autor', 'nota', 'post']
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Editar Avaliação',
+        'botao': 'Atualizar Avaliação'
+    }
 
-class IntroducaoDetailView(DetailView):
-    model = Introducao
-    template_name = 'detalhe.html'
+class ComentarioUpdate(UpdateView):
+    model = Comentario
+    template_name = 'paginas/form.html'
+    fields = ['autor', 'comentario', 'post']
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Editar Comentário',
+        'botao': 'Atualizar Comentário'
+    }
 
+#########################   DELETE   ##################################
 
-###########################################################
+class CategoriaDelete(DeleteView):
+    model = Categoria
+    template_name = 'paginas/form.html'
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Excluir Categoria',
+        'botao': 'Excluir Categoria',
+    }
 
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'paginas/form.html'
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Excluir Post',
+        'botao': 'Excluir Post',
+    }
 
+class AvaliacaoDelete(DeleteView):
+    model = Avaliação
+    template_name = 'paginas/form.html'
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Excluir Avaliação',
+        'botao': 'Excluir Avaliação',
+    }
+
+class ComentarioDelete(DeleteView):
+    model = Comentario
+    template_name = 'paginas/form.html'
+    success_url = reverse_lazy('index')
+    extra_context = {
+        'titulo': 'Excluir Comentário',
+        'botao': 'Excluir Comentário',
+    }

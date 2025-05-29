@@ -17,7 +17,7 @@ class Post(models.Model):
 
 class Avaliação(models.Model):
     autor = models.ForeignKey(User, on_delete=models.PROTECT)
-    nota = models.IntegerField(max_length=5)
+    nota = models.IntegerField()
     post = models.ForeignKey(Post, on_delete=models.PROTECT)
 
 class Comentario(models.Model):

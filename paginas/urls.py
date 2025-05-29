@@ -1,22 +1,33 @@
 from django.urls import path
 from .views import (
-    Inicio, SobreView,
-    ResumoCreateView, ResumoDetailView,
-    AbstractCreateView, AbstractDetailView,
-    IntroducaoCreateView, IntroducaoDetailView
+    IndexView, SobreView,
+    CategoriaCreate, CategoriaUpdate, CategoriaDelete,
+    PostCreate, PostUpdate, PostDelete,
+    AvaliacaoCreate, AvaliacaoUpdate, AvaliacaoDelete,
+    ComentarioCreate, ComentarioUpdate, ComentarioDelete
 )
 
 urlpatterns = [
-    path('', Inicio.as_view(), name='inicio'),
+    path('', IndexView.as_view(), name='index'),
     path('sobre/', SobreView.as_view(), name='sobre'),
 
-    path('resumo/novo/', ResumoCreateView.as_view(), name='resumo_novo'),
-    path('resumo/<int:pk>/', ResumoDetailView.as_view(), name='resumo_detalhe'),
+    # Categoria
+    path('categoria/nova/', CategoriaCreate.as_view(), name='categoria_nova'),
+    path('categoria/<int:pk>/editar/', CategoriaUpdate.as_view(), name='categoria_editar'),
+    path('categoria/<int:pk>/excluir/', CategoriaDelete.as_view(), name='categoria_excluir'),
 
-    path('abstract/novo/', AbstractCreateView.as_view(), name='abstract_novo'),
-    path('abstract/<int:pk>/', AbstractDetailView.as_view(), name='abstract_detalhe'),
+    # Post
+    path('post/novo/', PostCreate.as_view(), name='post_novo'),
+    path('post/<int:pk>/editar/', PostUpdate.as_view(), name='post_editar'),
+    path('post/<int:pk>/excluir/', PostDelete.as_view(), name='post_excluir'),
 
-    path('introducao/novo/', IntroducaoCreateView.as_view(), name='introducao_novo'),
-    path('introducao/<int:pk>/', IntroducaoDetailView.as_view(), name='introducao_detalhe'),
+    # Avaliação
+    path('avaliacao/nova/', AvaliacaoCreate.as_view(), name='avaliacao_nova'),
+    path('avaliacao/<int:pk>/editar/', AvaliacaoUpdate.as_view(), name='avaliacao_editar'),
+    path('avaliacao/<int:pk>/excluir/', AvaliacaoDelete.as_view(), name='avaliacao_excluir'),
 
+    # Comentário
+    path('comentario/novo/', ComentarioCreate.as_view(), name='comentario_novo'),
+    path('comentario/<int:pk>/editar/', ComentarioUpdate.as_view(), name='comentario_editar'),
+    path('comentario/<int:pk>/excluir/', ComentarioDelete.as_view(), name='comentario_excluir'),
 ]
