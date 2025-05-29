@@ -11,3 +11,4 @@ class Resumo(models.Model):
     def __str__(self):
         return "Resumo"
 
+

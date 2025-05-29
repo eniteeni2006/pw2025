@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, DetailView, CreateView
+from django.views.generic import TemplateView, DetailView, CreateView, ListView
 from django.urls import reverse_lazy
 from .models import (
     Resumo, Abstract, Introducao, Objetivos, Justificativa,
@@ -40,5 +40,8 @@ class IntroducaoCreateView(CreateView):
 class IntroducaoDetailView(DetailView):
     model = Introducao
     template_name = 'detalhe.html'
+
+
+###########################################################
 
 

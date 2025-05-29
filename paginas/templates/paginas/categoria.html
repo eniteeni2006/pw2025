@@ -1,0 +1,32 @@
+{% extends "paginas/index.html" %}
+
+{% block title %}Sobre nós{% endblock %}
+
+{% load static %}
+
+{% block conteudo  %}
+<h3>Categoria</h3>
+<table>
+    <tr>
+        <th>Nome</th>
+        <th>Opções</th>
+    </tr>
+
+    {% for obj in object_list %}
+    <tr>
+        <td>{{ obj.nome }}</td>
+        
+        <td>
+            <a href="#">Editar</a>
+            <a href="#">Excluir</a>
+        </td>
+    </tr>
+
+    {% else %}
+    <tr>
+        <td colspan="2">Nenhuma categoria encontrada</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock  %}
