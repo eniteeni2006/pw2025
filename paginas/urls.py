@@ -4,8 +4,11 @@ from .views import (
     CategoriaCreate, CategoriaUpdate, CategoriaDelete,
     PostCreate, PostUpdate, PostDelete,
     AvaliacaoCreate, AvaliacaoUpdate, AvaliacaoDelete,
-    ComentarioCreate, ComentarioUpdate, ComentarioDelete
-)
+    ComentarioCreate, ComentarioUpdate, ComentarioDelete, 
+    CategoriaList, PostList, AvaliaçãoList,
+    ComentarioList
+
+    )
 
 urlpatterns = [
     path('', IndexView.as_view(), name='index'),
@@ -15,19 +18,24 @@ urlpatterns = [
     path('categoria/nova/', CategoriaCreate.as_view(), name='categoria_nova'),
     path('categoria/<int:pk>/editar/', CategoriaUpdate.as_view(), name='categoria_editar'),
     path('categoria/<int:pk>/excluir/', CategoriaDelete.as_view(), name='categoria_excluir'),
+    path('categoria/listar/', CategoriaList.as_view(), name='categoria_listar'),
 
     # Post
     path('post/novo/', PostCreate.as_view(), name='post_novo'),
     path('post/<int:pk>/editar/', PostUpdate.as_view(), name='post_editar'),
     path('post/<int:pk>/excluir/', PostDelete.as_view(), name='post_excluir'),
+    path('post/listar/', PostList.as_view(), name='post_listar'),
 
     # Avaliação
     path('avaliacao/nova/', AvaliacaoCreate.as_view(), name='avaliacao_nova'),
     path('avaliacao/<int:pk>/editar/', AvaliacaoUpdate.as_view(), name='avaliacao_editar'),
     path('avaliacao/<int:pk>/excluir/', AvaliacaoDelete.as_view(), name='avaliacao_excluir'),
+    path('avaliacao/listar/', AvaliaçãoList.as_view(), name='avaliacao_listar'),
+
 
     # Comentário
     path('comentario/novo/', ComentarioCreate.as_view(), name='comentario_novo'),
     path('comentario/<int:pk>/editar/', ComentarioUpdate.as_view(), name='comentario_editar'),
     path('comentario/<int:pk>/excluir/', ComentarioDelete.as_view(), name='comentario_excluir'),
+    path('comentario/listar/', ComentarioList.as_view(), name='comentario_listar'),
 ]

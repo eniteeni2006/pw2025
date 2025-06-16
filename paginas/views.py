@@ -1,5 +1,7 @@
 from datetime import date
-from django.views.generic import TemplateView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.list import ListView
+from django.views.generic import TemplateView
+from django.views.generic.edit import  CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post, Categoria, Comentario, Avaliação
 
@@ -28,7 +30,7 @@ class CategoriaCreate(CreateView):
 class PostCreate(CreateView):
     model = Post
     template_name = 'paginas/form.html'
-    fields = ['titulo', 'data', 'texto', 'categoria', 'autor']
+    fields = ['titulo',  'texto', 'categoria', 'autor']
     success_url = reverse_lazy('index')
     extra_context = {
         'titulo': 'Novo Post',
@@ -71,7 +73,7 @@ class CategoriaUpdate(UpdateView):
 class PostUpdate(UpdateView):
     model = Post
     template_name = 'paginas/form.html'
-    fields = ['titulo', 'data', 'texto', 'categoria', 'autor']
+    fields = ['titulo',  'texto', 'categoria', 'autor']
     success_url = reverse_lazy('index')
     extra_context = {
         'titulo': 'Editar Post',
@@ -135,3 +137,23 @@ class ComentarioDelete(DeleteView):
         'titulo': 'Excluir Comentário',
         'botao': 'Excluir Comentário',
     }
+
+
+##################################################
+
+
+class CategoriaList(ListView):
+    model = Categoria
+    template_name = 'paginas/listas/categoria.html'
+
+class PostList(ListView):
+    model = Post
+    template_name = 'paginas/listas/post.html'
+
+class AvaliaçãoList(ListView):
+    model = Avaliação
+    template_name = 'paginas/listas/avaliacao.html'
+
+class ComentarioList(ListView):
+    model = Comentario
+    template_name = 'paginas/listas/comentario.html'

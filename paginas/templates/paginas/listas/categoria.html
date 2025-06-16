@@ -1,4 +1,4 @@
-{% extends "paginas/index.html" %}
+{% extends "paginas/modelo.html" %}
 
 {% block title %}Sobre nós{% endblock %}
 
@@ -22,7 +22,7 @@
         </td>
     </tr>
 
-    {% else %}
+    {% empty %}
     <tr>
         <td colspan="2">Nenhuma categoria encontrada</td>
     </tr>

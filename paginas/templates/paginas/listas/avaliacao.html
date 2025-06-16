@@ -1,0 +1,37 @@
+{% extends "paginas/modelo.html" %}
+
+{% block title %}Sobre nós{% endblock %}
+
+{% load static %}
+
+{% block conteudo  %}
+<h3>Categoria</h3>
+<table>
+    <tr>
+        <th>Autor</th>
+        <th>Nota</th>
+        <th>Post</th>
+        <th>Opções</th>
+    </tr>
+
+    {% for obj in object_list %}
+    <tr>
+        <td>{{ obj.autor }}</td>
+        <td>{{ obj.nota }}</td>
+        <td>{{ obj.post }}</td>
+       
+        
+        <td>
+            <a href="#">Editar</a>
+            <a href="#">Excluir</a>
+        </td>
+    </tr>
+
+    {% empty %}
+    <tr>
+        <td colspan="4">Nenhuma avaliação encontrada</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock  %}

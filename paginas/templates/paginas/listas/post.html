@@ -1,0 +1,40 @@
+{% extends "paginas/modelo.html" %}
+
+{% block title %}Sobre nós{% endblock %}
+
+{% load static %}
+
+{% block conteudo  %}
+<h3>Categoria</h3>
+<table>
+    <tr>
+        <th>Titulos</th>
+        <th>Data</th>
+        <th>Texto</th>
+        <th>Categoria</th>
+        <th>Autor</th>
+        <th>Opções</th>
+    </tr>
+
+    {% for obj in object_list %}
+    <tr>
+        <td>{{ obj.titulo }}</td>
+        <td>{{ obj.data }}</td>
+        <td>{{ obj.texto }}</td>
+        <td>{{ obj.categoria }}</td>
+        <td>{{ obj.autor }}</td>
+        
+        <td>
+            <a href="#">Editar</a>
+            <a href="#">Excluir</a>
+        </td>
+    </tr>
+
+    {% empty %}
+    <tr>
+        <td colspan="6">Nenhum post encontrado</td>
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock  %}
