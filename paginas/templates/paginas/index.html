@@ -48,5 +48,26 @@
     {% else %}
         <p>Não há posts cadastrados ainda.</p>
     {% endif %}
+
+    <ul id="menu">
+
+        <li><a href="{% url "index" %}">Início</a></li>
+        <li><a href="{% url "sobre" %}">Sobre Nós</a></li>
+
+        {% if request.user.is_authenticated %}
+        <li><a href="{% url "categoria_listar" %}">Listar Categoria</a></li>
+        <li><a href="{% url "post_listar" %}">Listar Post</a></li>
+        <li><a href="{% url "avaliacao_listar" %}">Listar Avaliacao</a></li>
+        <li><a href="{% url "comentario_listar" %}">Listar Comentario</a></li>
+
+        <li><a href="{% url "senha" %}">Atualizar senha</a></li>
+        <li><a href="{% url "Sair" %}">Sair</a></li>
+        {% else %}
+        <li>
+            <a href="{% url "login" %}">Entrar</a>
+        </li>
+        {% endif %}
+
+    </ul>
 </body>
 </html>

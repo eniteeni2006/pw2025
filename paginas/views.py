@@ -4,6 +4,10 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import  CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post, Categoria, Comentario, Avaliação
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+
 
 
 class IndexView(TemplateView):
@@ -17,7 +21,7 @@ class SobreView(TemplateView):
 
 #########################   CREATE   ##################################
 
-class CategoriaCreate(CreateView):
+class CategoriaCreate(LoginRequiredMixin, CreateView):
     model = Categoria
     template_name = 'paginas/form.html'
     fields = ['nome']
