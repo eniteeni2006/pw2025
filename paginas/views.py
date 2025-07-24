@@ -5,6 +5,12 @@ from django.views.generic.edit import  CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from .models import Post, Categoria, Comentario, Avaliação
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.views.generic.edit import CreateView
+
+
 
 
 
@@ -161,3 +167,48 @@ class AvaliaçãoList(ListView):
 class ComentarioList(ListView):
     model = Comentario
     template_name = 'paginas/listas/comentario.html'
+
+    ##################################################
+
+    class CategoriaList(LoginRequiredMixin, ListView):
+     model = Categoria
+     template_name = 'categoria'
+
+    class PostList(LoginRequiredMixin, ListView):
+     model = Post
+     template_name = 'post'
+
+    class AvaliaçãoList(LoginRequiredMixin, ListView):
+     model = Avaliação
+     template_name = 'avaliação'
+
+    class ComentarioList(LoginRequiredMixin, ListView):
+     model = Comentario
+     template_name = 'comentario'
+
+    #####################################################
+
+    class CriarCategoriaView(SuccessMessageMixin, CreateView):
+      model = Categoria
+      fields = ['nome']
+      success_url = '/alunos/'
+      success_message = "Categoria criada com sucesso!"
+
+    class CriarPostView(SuccessMessageMixin, CreateView):
+      model = Post
+      fields = ['titulo',  'texto', 'categoria', 'autor']
+      success_url = '/alunos/'
+      success_message = "Post criado com sucesso!"
+
+
+    class CriarAvaliaçãoView(SuccessMessageMixin, CreateView):
+      model = Avaliação
+      fields =  ['autor', 'nota', 'post']
+      success_url = '/alunos/'
+      success_message = "Avaliação criada com sucesso!"
+
+    class CriarComentarioView(SuccessMessageMixin, CreateView):
+      model = Comentario
+      fields =  ['autor', 'comentario', 'post']
+      success_url = '/alunos/'
+      success_message = "Comentario criado com sucesso!"
