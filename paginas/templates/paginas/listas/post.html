@@ -25,8 +25,8 @@
         <td>{{ obj.autor }}</td>
         
         <td>
-            <a href="#">Editar</a>
-            <a href="#">Excluir</a>
+            <a href="{% url "post_editar" obj.pk %}">Editar</a>
+            <a href="{% url "post_excluir" obj.pk %}">Excluir</a>
         </td>
     </tr>
 
