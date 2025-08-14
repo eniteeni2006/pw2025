@@ -41,6 +41,7 @@ class CategoriaCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Post
     template_name = 'paginas/form.html'
+    # Remove do fields o campo que tem relação com User
     fields = ['titulo',  'texto', 'categoria', 'autor']
     success_url = reverse_lazy('index')
     success_message = "Post criado com sucesso!"
@@ -48,6 +49,12 @@ class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         'titulo': 'Novo Post',
         'botao': 'Publicar Post'
     }
+
+    def form_valid(self, form):
+        #pegar o usuario que esta autenticado
+        form.instance.solicitado_por = self.request.user
+        url = super().form_valid(form)
+        return url
 
 class AvaliacaoCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Avaliação
