@@ -1,5 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
+from .views import CadastroUsuarioView
 
 from .views import (
     IndexView, SobreView,
@@ -13,6 +14,7 @@ from .views import (
     )
 
 urlpatterns = [
+    path("registrar/", CadastroUsuarioView.as_view(), name="registrar"),
 
     #Criar rota para pgn de login
     path("login/", auth_views.LoginView.as_view(

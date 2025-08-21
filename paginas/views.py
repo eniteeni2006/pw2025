@@ -9,12 +9,34 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.views.generic.edit import CreateView
+from django.contrib.auth.models import User, Group
+from .forms import UsuarioCadastroForm
 
 
+# Crie a view no final do arquivo ou em outro local que faça sentido
+class CadastroUsuarioView(CreateView):
+    model = User
+    # Não tem o fields, pois ele é definido no forms.py
+    form_class = UsuarioCadastroForm
+    # Pode utilizar o seu form padrão
+    template_name = 'paginas/form.html'
+    success_url = reverse_lazy('login')
+    extra_context = {'titulo': 'Registro de usuários',
+                     'botao': 'Cadastrar',
+                    }
 
 
+    def form_valid(self, form):
+        # Faz o comportamento padrão do form_valid
+        url = super().form_valid(form)
+        # Busca ou cria um grupo com esse nome
+        grupo, criado = Group.objects.get_or_create(name='Estudante')
+        # Acessa o objeto criado e adiciona o usuário no grupo acima
+        self.object.groups.add(grupo)
+        # Retorna a URL de sucesso
+        return url
 
-
+#######################
 
 class IndexView(TemplateView):
     model = Post
@@ -41,8 +63,8 @@ class CategoriaCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Post
     template_name = 'paginas/form.html'
-    # Remove do fields o campo que tem relação com User
-    fields = ['titulo',  'texto', 'categoria', 'autor']
+    # Remove do fields o campo que tem relação com User (removi o autor{autor é equivalente a user} 21/08/2025)
+    fields = ['titulo',  'texto', 'categoria']
     success_url = reverse_lazy('index')
     success_message = "Post criado com sucesso!"
     extra_context = {

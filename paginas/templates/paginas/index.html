@@ -63,9 +63,8 @@
         <li><a href="{% url "senha" %}">Atualizar senha</a></li>
         <li><a href="{% url "Sair" %}">Sair</a></li>
         {% else %}
-        <li>
-            <a href="{% url "login" %}">Entrar</a>
-        </li>
+        <li><a href="{% url "login" %}">Entrar</a></li>
+        <li><a href="{% url "registrar" %}">Registrar</a></li>
         {% endif %}
 
     </ul>
