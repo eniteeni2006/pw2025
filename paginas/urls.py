@@ -1,6 +1,8 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import CadastroUsuarioView
+from .views import MinhasSolicitacoes
+
 
 from .views import (
     IndexView, SobreView,
@@ -61,4 +63,6 @@ urlpatterns = [
     path('comentario/<int:pk>/editar/', ComentarioUpdate.as_view(), name='comentario_editar'),
     path('comentario/<int:pk>/excluir/', ComentarioDelete.as_view(), name='comentario_excluir'),
     path('comentario/listar/', ComentarioList.as_view(), name='comentario_listar'),
+
+    # URL PRA "MinhasSolicitacoes" path("listar/minhas-solicitacoes/"), MinhasSolicitacoes.as_view, name = '' (perdi o fio da miada)
 ]

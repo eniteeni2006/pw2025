@@ -27,13 +27,10 @@ class CadastroUsuarioView(CreateView):
 
 
     def form_valid(self, form):
-        # Faz o comportamento padrão do form_valid
+        # Pegar o usuário que está autenticado
+        form.instance.solicitado_por = self.request.user
         url = super().form_valid(form)
-        # Busca ou cria um grupo com esse nome
-        grupo, criado = Group.objects.get_or_create(name='Estudante')
-        # Acessa o objeto criado e adiciona o usuário no grupo acima
-        self.object.groups.add(grupo)
-        # Retorna a URL de sucesso
+
         return url
 
 #######################
@@ -147,6 +144,26 @@ class ComentarioUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         'botao': 'Atualizar Comentário'
     }
 
+class SolicitacaoUpdate(LoginRequiredMixin, UpdateView):
+    model = Solicitacao
+    template_name = 'paginas/form.html'
+    fields = ['solicitacao']
+    success_url = reverse_lazy('listar-solicitacao')
+    success_message = "Solicitação bem sucedida"
+    extra_context = {
+        'titulo': 'Atualizar Solicitação',
+        'botao': 'Salvar'
+    }
+
+
+    def get_objetc(self, queryset=None):
+        # get_object_or_404 - busca o objeto ou retorna 404
+        from django.shortcuts import get_object_or_404
+        obj = get_object_or_404(Solicitacao, pk=self.kwargs['pk'], solicitado_por=self.request.user)
+
+    return obj # type: ignore | arrumar o "Solicitacao"
+
+
 #########################   DELETE   ##################################
 
 class CategoriaDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
@@ -190,7 +207,7 @@ class ComentarioDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
     }
 
 
-##################################################
+######################  LISTAR ############################
 
 
 class CategoriaList(LoginRequiredMixin, ListView):
@@ -209,3 +226,24 @@ class ComentarioList(ListView):
     model = Comentario
     template_name = 'paginas/listas/comentario.html'
 
+class SolicitacaoList(LoginRequiredMixin, ListView):
+    model = Solicitacao
+    template_name = 'paginas/listas/solicitacao.html'
+
+
+#Fazer uma herança para ter tudo o que tem na solicitacaoList
+class MinhasSolicitacoes(SolicitacaoList):
+
+    def get_queryset(self):
+        # Como fazer consultas/filtros no django
+        # Classe.objects.all() #Retorna todos os objetos
+        # Classe.objects.filter(atributo=algum_valor, a2=v2)
+        qs = Solicitacao.object.filter(solicitado_por=self.request.user)
+        return qs
+    
+    def get_objetc(self, queryset=None):
+        # get_object_or_404 - busca o objeto ou retorna 404
+        from django.shortcuts import get_object_or_404
+        obj = get_object_or_404(Solicitacao, pk=self.kwargs['pk'], solicitado_por=self.request.user)
+
+    return obj # type: ignore | arrumar o "Solicitacao"
