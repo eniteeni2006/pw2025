@@ -121,6 +121,12 @@ class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         'titulo': 'Editar Post',
         'botao': 'Atualizar Post'
     }
+    def get_objetc(self, queryset=None):
+        # get_object_or_404 - busca o objeto ou retorna 404
+        from django.shortcuts import get_object_or_404
+        obj = get_object_or_404(Post, pk=self.kwargs['pk'], autor=self.request.user)
+
+        return obj # type: ignore | arrumar o "Solicitacao"
 
 class AvaliacaoUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Avaliação
@@ -132,6 +138,12 @@ class AvaliacaoUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         'titulo': 'Editar Avaliação',
         'botao': 'Atualizar Avaliação'
     }
+    def get_objetc(self, queryset=None):
+        # get_object_or_404 - busca o objeto ou retorna 404
+        from django.shortcuts import get_object_or_404
+        obj = get_object_or_404(Avaliação, pk=self.kwargs['pk'], post=self.request.user)
+
+        return obj # type: ignore | arrumar o "Solicitacao"
 
 class ComentarioUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Comentario
@@ -144,24 +156,14 @@ class ComentarioUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
         'botao': 'Atualizar Comentário'
     }
 
-class SolicitacaoUpdate(LoginRequiredMixin, UpdateView):
-    model = Solicitacao
-    template_name = 'paginas/form.html'
-    fields = ['solicitacao']
-    success_url = reverse_lazy('listar-solicitacao')
-    success_message = "Solicitação bem sucedida"
-    extra_context = {
-        'titulo': 'Atualizar Solicitação',
-        'botao': 'Salvar'
-    }
-
-
     def get_objetc(self, queryset=None):
         # get_object_or_404 - busca o objeto ou retorna 404
         from django.shortcuts import get_object_or_404
-        obj = get_object_or_404(Solicitacao, pk=self.kwargs['pk'], solicitado_por=self.request.user)
+        obj = get_object_or_404(Comentario, pk=self.kwargs['pk'], autor=self.request.user)
 
-    return obj # type: ignore | arrumar o "Solicitacao"
+        return obj # type: ignore | arrumar o "Solicitacao"
+
+    
 
 
 #########################   DELETE   ##################################
@@ -231,19 +233,3 @@ class SolicitacaoList(LoginRequiredMixin, ListView):
     template_name = 'paginas/listas/solicitacao.html'
 
 
-#Fazer uma herança para ter tudo o que tem na solicitacaoList
-class MinhasSolicitacoes(SolicitacaoList):
-
-    def get_queryset(self):
-        # Como fazer consultas/filtros no django
-        # Classe.objects.all() #Retorna todos os objetos
-        # Classe.objects.filter(atributo=algum_valor, a2=v2)
-        qs = Solicitacao.object.filter(solicitado_por=self.request.user)
-        return qs
-    
-    def get_objetc(self, queryset=None):
-        # get_object_or_404 - busca o objeto ou retorna 404
-        from django.shortcuts import get_object_or_404
-        obj = get_object_or_404(Solicitacao, pk=self.kwargs['pk'], solicitado_por=self.request.user)
-
-    return obj # type: ignore | arrumar o "Solicitacao"
