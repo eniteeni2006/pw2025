@@ -1,41 +1,16 @@
-from datetime import date
-from django.views.generic.list import ListView
+from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView
-from django.views.generic.edit import  CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
-from .models import Post, Categoria, Comentario, Avaliação
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from django.contrib.messages.views import SuccessMessageMixin
-from django.views.generic.edit import CreateView
-from django.contrib.auth.models import User, Group
+from django.contrib import messages
+from django.contrib.auth.models import User
+from .models import Post, Categoria, Comentario, Avaliacao
 from .forms import UsuarioCadastroForm
 
-
-# Crie a view no final do arquivo ou em outro local que faça sentido
-class CadastroUsuarioView(CreateView):
-    model = User
-    # Não tem o fields, pois ele é definido no forms.py
-    form_class = UsuarioCadastroForm
-    # Pode utilizar o seu form padrão
-    template_name = 'paginas/form.html'
-    success_url = reverse_lazy('login')
-    extra_context = {'titulo': 'Registro de usuários',
-                     'botao': 'Cadastrar',
-                    }
-
-
-    def form_valid(self, form):
-        # Pegar o usuário que está autenticado
-        form.instance.solicitado_por = self.request.user
-        url = super().form_valid(form)
-
-        return url
-
-#######################
-
-class IndexView(TemplateView):
+class IndexView(ListView):
     model = Post
     template_name = 'paginas/index.html'
     context_object_name = 'post_list'
@@ -43,8 +18,12 @@ class IndexView(TemplateView):
 class SobreView(TemplateView):
     template_name = 'paginas/sobre.html'
 
-
-#########################   CREATE   ##################################
+class CadastroUsuarioView(CreateView):
+    model = User
+    form_class = UsuarioCadastroForm
+    template_name = 'paginas/form.html'
+    success_url = reverse_lazy('login')
+    extra_context = {'titulo': 'Registro de usuários', 'botao': 'Cadastrar'}
 
 class CategoriaCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Categoria
@@ -52,184 +31,133 @@ class CategoriaCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     fields = ['nome']
     success_url = reverse_lazy('index')
     success_message = "Categoria criada com sucesso!"
-    extra_context = {
-        'titulo': 'Nova Categoria',
-        'botao': 'Criar Categoria',
-    }
+    extra_context = {'titulo': 'Nova Categoria', 'botao': 'Criar Categoria'}
 
 class PostCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Post
     template_name = 'paginas/form.html'
-    # Remove do fields o campo que tem relação com User (removi o autor{autor é equivalente a user} 21/08/2025)
-    fields = ['titulo',  'texto', 'categoria']
+    fields = ['titulo', 'texto', 'categoria']
     success_url = reverse_lazy('index')
     success_message = "Post criado com sucesso!"
-    extra_context = {
-        'titulo': 'Novo Post',
-        'botao': 'Publicar Post'
-    }
-
+    extra_context = {'titulo': 'Novo Post', 'botao': 'Publicar Post'}
     def form_valid(self, form):
-        #pegar o usuario que esta autenticado
-        form.instance.solicitado_por = self.request.user
-        url = super().form_valid(form)
-        return url
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
 
 class AvaliacaoCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    model = Avaliação
+    model = Avaliacao
     template_name = 'paginas/form.html'
-    fields = ['autor', 'nota', 'post']
+    fields = ['nota', 'post']
     success_url = reverse_lazy('index')
     success_message = "Avaliação criada com sucesso!"
-    extra_context = {
-        'titulo': 'Nova Avaliação',
-        'botao': 'Avaliar'
-    }
+    extra_context = {'titulo': 'Nova Avaliação', 'botao': 'Avaliar'}
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
 
 class ComentarioCreate(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Comentario
     template_name = 'paginas/form.html'
-    fields = ['autor', 'comentario', 'post']
+    fields = ['comentario', 'post']
     success_url = reverse_lazy('index')
     success_message = "Comentário criado com sucesso!"
-    extra_context = {
-        'titulo': 'Novo Comentário',
-        'botao': 'Publicar Comentário'
-    }
+    extra_context = {'titulo': 'Novo Comentário', 'botao': 'Publicar Comentário'}
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
 
-
-#########################   UPDATE   ##################################
-
-class CategoriaUpdate(LoginRequiredMixin,SuccessMessageMixin,  UpdateView):
+class CategoriaUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Categoria
     template_name = 'paginas/form.html'
     fields = ['nome']
     success_url = reverse_lazy('index')
     success_message = "Categoria editada com sucesso!"
-    extra_context = {
-        'titulo': 'Editar Categoria',
-        'botao': 'Atualizar Categoria',
-    }
+    extra_context = {'titulo': 'Editar Categoria', 'botao': 'Atualizar Categoria'}
 
 class PostUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Post
     template_name = 'paginas/form.html'
-    fields = ['titulo',  'texto', 'categoria', 'autor']
+    fields = ['titulo', 'texto', 'categoria']
     success_url = reverse_lazy('index')
     success_message = "Post editado com sucesso!"
-    extra_context = {
-        'titulo': 'Editar Post',
-        'botao': 'Atualizar Post'
-    }
-    def get_objetc(self, queryset=None):
-        # get_object_or_404 - busca o objeto ou retorna 404
-        from django.shortcuts import get_object_or_404
-        obj = get_object_or_404(Post, pk=self.kwargs['pk'], autor=self.request.user)
-
-        return obj # type: ignore | arrumar o "Solicitacao"
+    extra_context = {'titulo': 'Editar Post', 'botao': 'Atualizar Post'}
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post, pk=self.kwargs['pk'], autor=self.request.user)
 
 class AvaliacaoUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
-    model = Avaliação
+    model = Avaliacao
     template_name = 'paginas/form.html'
-    fields = ['autor', 'nota', 'post']
+    fields = ['nota', 'post']
     success_url = reverse_lazy('index')
     success_message = "Avaliação editada com sucesso!"
-    extra_context = {
-        'titulo': 'Editar Avaliação',
-        'botao': 'Atualizar Avaliação'
-    }
-    def get_objetc(self, queryset=None):
-        # get_object_or_404 - busca o objeto ou retorna 404
-        from django.shortcuts import get_object_or_404
-        obj = get_object_or_404(Avaliação, pk=self.kwargs['pk'], post=self.request.user)
-
-        return obj # type: ignore | arrumar o "Solicitacao"
+    extra_context = {'titulo': 'Editar Avaliação', 'botao': 'Atualizar Avaliação'}
+    def get_object(self, queryset=None):
+        return get_object_or_404(Avaliacao, pk=self.kwargs['pk'], autor=self.request.user)
 
 class ComentarioUpdate(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = Comentario
     template_name = 'paginas/form.html'
-    fields = ['autor', 'comentario', 'post']
+    fields = ['comentario', 'post']
     success_url = reverse_lazy('index')
     success_message = "Comentário editado com sucesso!"
-    extra_context = {
-        'titulo': 'Editar Comentário',
-        'botao': 'Atualizar Comentário'
-    }
+    extra_context = {'titulo': 'Editar Comentário', 'botao': 'Atualizar Comentário'}
+    def get_object(self, queryset=None):
+        return get_object_or_404(Comentario, pk=self.kwargs['pk'], autor=self.request.user)
 
-    def get_objetc(self, queryset=None):
-        # get_object_or_404 - busca o objeto ou retorna 404
-        from django.shortcuts import get_object_or_404
-        obj = get_object_or_404(Comentario, pk=self.kwargs['pk'], autor=self.request.user)
-
-        return obj # type: ignore | arrumar o "Solicitacao"
-
-    
-
-
-#########################   DELETE   ##################################
-
-class CategoriaDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class CategoriaDelete(LoginRequiredMixin, DeleteView):
     model = Categoria
     template_name = 'paginas/form.html'
     success_url = reverse_lazy('index')
-    success_message = "Categoria excluida com sucesso!"
-    extra_context = {
-        'titulo': 'Excluir Categoria',
-        'botao': 'Excluir Categoria',
-    }
+    extra_context = {'titulo': 'Excluir Categoria', 'botao': 'Excluir Categoria'}
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Categoria excluída com sucesso!")
+        return super().delete(request, *args, **kwargs)
 
-class PostDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'paginas/form.html'
     success_url = reverse_lazy('index')
-    success_message = "Post excluido com sucesso!"
-    extra_context = {
-        'titulo': 'Excluir Post',
-        'botao': 'Excluir Post',
-    }
+    extra_context = {'titulo': 'Excluir Post', 'botao': 'Excluir Post'}
+    def get_object(self, queryset=None):
+        return get_object_or_404(Post, pk=self.kwargs['pk'], autor=self.request.user)
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Post excluído com sucesso!")
+        return super().delete(request, *args, **kwargs)
 
-class AvaliacaoDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
-    model = Avaliação
+class AvaliacaoDelete(LoginRequiredMixin, DeleteView):
+    model = Avaliacao
     template_name = 'paginas/form.html'
     success_url = reverse_lazy('index')
-    success_message = "Avaliação excluida com sucesso!"
-    extra_context = {
-        'titulo': 'Excluir Avaliação',
-        'botao': 'Excluir Avaliação',
-    }
+    extra_context = {'titulo': 'Excluir Avaliação', 'botao': 'Excluir Avaliação'}
+    def get_object(self, queryset=None):
+        return get_object_or_404(Avaliacao, pk=self.kwargs['pk'], autor=self.request.user)
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Avaliação excluída com sucesso!")
+        return super().delete(request, *args, **kwargs)
 
-class ComentarioDelete(LoginRequiredMixin, SuccessMessageMixin, DeleteView):
+class ComentarioDelete(LoginRequiredMixin, DeleteView):
     model = Comentario
     template_name = 'paginas/form.html'
     success_url = reverse_lazy('index')
-    success_message = "Comentario excluido com sucesso!"
-    extra_context = {
-        'titulo': 'Excluir Comentário',
-        'botao': 'Excluir Comentário',
-    }
-
-
-######################  LISTAR ############################
-
+    extra_context = {'titulo': 'Excluir Comentário', 'botao': 'Excluir Comentário'}
+    def get_object(self, queryset=None):
+        return get_object_or_404(Comentario, pk=self.kwargs['pk'], autor=self.request.user)
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, "Comentário excluído com sucesso!")
+        return super().delete(request, *args, **kwargs)
 
 class CategoriaList(LoginRequiredMixin, ListView):
     model = Categoria
     template_name = 'paginas/listas/categoria.html'
 
-class PostList(ListView):
+class PostList(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'paginas/listas/post.html'
 
-class AvaliaçãoList(ListView):
-    model = Avaliação
+class AvaliacaoList(LoginRequiredMixin, ListView):
+    model = Avaliacao
     template_name = 'paginas/listas/avaliacao.html'
 
-class ComentarioList(ListView):
+class ComentarioList(LoginRequiredMixin, ListView):
     model = Comentario
     template_name = 'paginas/listas/comentario.html'
-
-class SolicitacaoList(LoginRequiredMixin, ListView):
-    model = Solicitacao
-    template_name = 'paginas/listas/solicitacao.html'
-
-

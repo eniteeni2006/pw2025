@@ -26,7 +26,7 @@ class Post(models.Model):
         return f"{self.titulo} - {self.autor.username}"
 
 
-class Avaliação(models.Model):
+class Avaliacao(models.Model):
     autor = models.ForeignKey(User, on_delete=models.PROTECT)
     nota = models.IntegerField()
     post = models.ForeignKey(Post, on_delete=models.PROTECT)

@@ -1,30 +1,37 @@
 {% extends "paginas/modelo.html" %}
 
-{% load static %}
-
 {% block conteudo %}
-<h3>{{titulo}}</h3>
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3 class="card-title">{{ titulo }}</h3>
+            
+            <p class="text-muted">* Campos obrigatórios</p>
 
-<p>* Campos obrigatórios</p>
+            <form action="" method="post">
+                {% csrf_token %}
 
-<form action="" method="post">
+                {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                        {% endif %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger mt-1">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
 
-    {% csrf_token %}
+                {% if botao == "Excluir" %}
+                    <h4 class="text-danger mt-4">
+                        Deseja excluir o registro: {{ object }}
+                    </h4>
+                {% endif %}
 
-    {{ form.as_p }}
-
-    {% if botao == "Excluir" %}
-    <h4>
-        Deseja excluir o registro: 
-        <span style="color: red;">
-            {{ object }} 
-        </span>
-    </h4>
-    {% endif %}
-
-    <button type="submit">{{ botao }}</button>
-
-</form>
-
-
-{% endblock %}
+                <button type="submit" class="btn btn-primary mt-3">{{ botao }}</button>
+                <a href="javascript:history.back()" class="btn btn-secondary mt-3">Voltar</a>
+            </form>
+        </div>
+    </div>
+{% endblock conteudo %}

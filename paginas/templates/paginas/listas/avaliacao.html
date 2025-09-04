@@ -1,37 +1,37 @@
 {% extends "paginas/modelo.html" %}
 
-{% block title %}Sobre nós{% endblock %}
+{% block conteudo %}
+    <h3 class="my-4">Lista de Avaliações</h3>
 
-{% load static %}
+    <a href="{% url 'avaliacao_nova' %}" class="btn btn-primary mb-4">➕ Adicionar Nova Avaliação</a>
 
-{% block conteudo  %}
-<h3>Categoria</h3>
-<table>
-    <tr>
-        <th>Autor</th>
-        <th>Nota</th>
-        <th>Post</th>
-        <th>Opções</th>
-    </tr>
-
-    {% for obj in object_list %}
-    <tr>
-        <td>{{ obj.autor }}</td>
-        <td>{{ obj.nota }}</td>
-        <td>{{ obj.post }}</td>
-       
-        
-        <td>
-            <a href="#">Editar</a>
-            <a href="#">Excluir</a>
-        </td>
-    </tr>
-
-    {% empty %}
-    <tr>
-        <td colspan="4">Nenhuma avaliação encontrada</td>
-    </tr>
-    {% endfor %}
-
-</table>
-{% endblock  %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Autor</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Post</th>
+                    <th scope="col">Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in object_list %}
+                    <tr>
+                        <td>{{ obj.autor }}</td>
+                        <td>{{ obj.nota }}</td>
+                        <td>{{ obj.post }}</td>
+                        <td>
+                            <a href="{% url 'avaliacao_editar' obj.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                            <a href="{% url 'avaliacao_excluir' obj.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">Nenhuma avaliação encontrada.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock conteudo %}

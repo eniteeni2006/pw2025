@@ -1,37 +1,42 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog de notícias</title>
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static "css/estilo.css" %}">
 </head>
 <body>
-
-    <div class="nav">
-        <ul>
-            <li><a href="{% url "categoria_nova" %}">Categoria</a></li>
-            <li><a href="{% url "post_novo" %}">Post</a></li>
-            <li><a href="{% url "avaliacao_nova" %}">Avaliação</a></li>
-            <li><a href="{% url "comentario_novo" %}">Comentario</a></li>
-        </ul>
-    </div>
-
-    <!-- Código do "miolo" do site -->
-    <div>
-        {% block conteudo %}
-        <h2>Título</h2>
-        <p>Aqui vai um texto de exemplo</p>
-        {% endblock conteudo %}
-    </div>
-
-
-    <div class="rodape">
-        Desenvolvido por Natan e Emanuely
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'index' %}">Meu Blog</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'sobre' %}">Sobre Nós</a></li>
+                    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'post_novo' %}">Criar Post</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'alterar-senha' %}">Alterar Senha</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Sair</a></li>
+                    {% else %}
+                        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'registrar' %}">Registrar</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
     
+    <div class="container mt-4">
+        {% block conteudo %}{% endblock conteudo %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -1,13 +1,17 @@
-{% extends "paginas/index.html" %}
+{% extends "paginas/modelo.html" %}
 
-{% block title %}Sobre nós{% endblock %}
-
-{% load static %}
-
-{% block conteudo  %}
-<h3>Sobre Nós</h3>
-
-<p>
-    Texto da página Sobre
-</p>
-{% endblock  %}
+{% block conteudo %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <h3 class="card-title">Sobre Nós</h3>
+            <p class="card-text">
+                Bem-vindo ao nosso blog! Somos Natan e Emanuely, os criadores por trás deste projeto. Nossa paixão é compartilhar informações relevantes e conteúdos interessantes sobre diversos temas. 
+                Acreditamos no poder da palavra para conectar pessoas e expandir horizontes.
+            </p>
+            <p class="card-text">
+                Aqui você encontrará posts sobre tecnologia, inovação, notícias do dia a dia e muito mais. Esperamos que goste do nosso conteúdo e que se sinta em casa para deixar seus comentários e avaliações. 
+                Sua participação é fundamental para o crescimento da nossa comunidade!
+            </p>
+        </div>
+    </div>
+{% endblock conteudo %}

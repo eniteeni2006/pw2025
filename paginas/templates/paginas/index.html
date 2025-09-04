@@ -1,91 +1,31 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Meu Blog</title>
-</head>
-<body>
-    <h1>Bem-vindo ao Meu Blog!</h1>
-
-    <p><a href="{% url 'post_novo' %}">➕ Criar novo post</a></p>
-
-    <hr>
-
+{% extends "paginas/modelo.html" %}
+{% block conteudo %}
+    <h1 class="my-4">Bem-vindo ao Meu Blog!</h1>
+    <a href="{% url 'post_novo' %}" class="btn btn-primary mb-4">➕ Criar novo post</a>
     {% if post_list %}
+        <div class="row">
         {% for post in post_list %}
-            <div>
-                <h2>{{ post.titulo }}</h2>
-                <p><strong>Data:</strong> {{ post.data|date:"d/m/Y H:i" }}</p>
-                <p><strong>Autor:</strong> {{ post.autor.username }}</p>
-                <p><strong>Categoria:</strong> {{ post.categoria.nome }}</p>
-                <p>{{ post.texto|truncatechars:100 }}</p>
-
-                <p>
-                    <a href="{% url 'post_editar' post.pk %}">✏️ Editar</a> |
-                    <a href="{% url 'post_excluir' post.pk %}">❌ Excluir</a>
-                </p>
-
-                <p>
-                    🗨️ Comentários: {{ post.comentario_set.count }}<br>
-                    ⭐ Média das notas: 
-                    {% with avaliacoes=post.avaliação_set.all %}
-                        {% if avaliacoes %}
-                            {% with total=0 %}
-                                {% for avaliacao in avaliacoes %}
-                                    {% widthratio total|add:avaliacao.nota 1 avaliacoes.count as media %}
-                                {% endfor %}
-                                {{ media }}
-                            {% endwith %}
-                        {% else %}
-                            Nenhuma avaliação
-                        {% endif %}
-                    {% endwith %}
-                </p>
-
-                <hr>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.titulo }}</h2>
+                        <p class="card-text text-muted">Data: {{ post.data|date:"d/m/Y H:i" }} | Autor: {{ post.autor.username }}</p>
+                        <hr>
+                        <p class="card-text">{{ post.texto|truncatechars:150 }}</p>
+                        <div class="d-flex justify-content-between align-items-center mt-3">
+                            <div>
+                                <a href="{% url 'post_editar' post.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                <a href="{% url 'post_excluir' post.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         {% endfor %}
+        </div>
     {% else %}
-        <p>Não há posts cadastrados ainda.</p>
+        <div class="alert alert-info text-center" role="alert">
+            Não há posts cadastrados ainda.
+        </div>
     {% endif %}
-
-    <ul id="menu">
-
-        <li><a href="{% url "index" %}">Início</a></li>
-        <li><a href="{% url "sobre" %}">Sobre Nós</a></li>
-
-        {% if request.user.is_authenticated %}
-        <li><a href="{% url "categoria_listar" %}">Listar Categoria</a></li>
-        <li><a href="{% url "post_listar" %}">Listar Post</a></li>
-        <li><a href="{% url "avaliacao_listar" %}">Listar Avaliacao</a></li>
-        <li><a href="{% url "comentario_listar" %}">Listar Comentario</a></li>
-
-        <li><a href="{% url "senha" %}">Atualizar senha</a></li>
-        <li><a href="{% url "Sair" %}">Sair</a></li>
-        {% else %}
-        <li><a href="{% url "login" %}">Entrar</a></li>
-        <li><a href="{% url "registrar" %}">Registrar</a></li>
-        {% endif %}
-
-    </ul>
-
-    {% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
-
-
-{% if messages %}
-    <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-    </ul>
-{% endif %}
-
-</body>
-</html>
+{% endblock conteudo %}
