@@ -22,8 +22,8 @@
                         {% endfor %}
                     </div>
                 {% endfor %}
-
-                {% if botao == "Excluir" %}
+                                                                                            
+                {% if botao|slice:":6" == "Excluir" %}
                     <h4 class="text-danger mt-4">
                         Deseja excluir o registro: {{ object }}
                     </h4>

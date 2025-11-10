@@ -5,7 +5,9 @@ from .views import (
     PostCreate, PostUpdate, PostDelete,
     AvaliacaoCreate, AvaliacaoUpdate, AvaliacaoDelete,
     ComentarioCreate, ComentarioUpdate, ComentarioDelete, 
-    CategoriaList, PostList, AvaliacaoList, ComentarioList
+    CategoriaList, PostList, AvaliacaoList, ComentarioList,
+    UsuarioList, UsuarioUpdate, UsuarioDelete,
+    PostDetailView, comentar_post, avaliar_post
 )
 
 # Views de autenticação do Django
@@ -47,6 +49,9 @@ urlpatterns = [
     path('post/novo/', PostCreate.as_view(), name='post_novo'),
     path('post/<int:pk>/editar/', PostUpdate.as_view(), name='post_editar'),
     path('post/<int:pk>/excluir/', PostDelete.as_view(), name='post_excluir'),
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post_detail'),
+    path('post/<int:pk>/comentar/', comentar_post, name='post_comentar'),
+    path('post/<int:pk>/avaliar/', avaliar_post, name='post_avaliar'),
     path('posts/', PostList.as_view(), name='post_list'),
 
     path('avaliacao/nova/', AvaliacaoCreate.as_view(), name='avaliacao_nova'),
@@ -58,4 +63,9 @@ urlpatterns = [
     path('comentario/<int:pk>/editar/', ComentarioUpdate.as_view(), name='comentario_editar'),
     path('comentario/<int:pk>/excluir/', ComentarioDelete.as_view(), name='comentario_excluir'),
     path('comentarios/', ComentarioList.as_view(), name='comentario_list'),
+
+    # Rotas para gerenciar usuários (visível apenas para superuser)
+    path('usuarios/', UsuarioList.as_view(), name='usuarios'),
+    path('usuario/<int:pk>/editar/', UsuarioUpdate.as_view(), name='usuario_editar'),
+    path('usuario/<int:pk>/excluir/', UsuarioDelete.as_view(), name='usuario_excluir'),
 ]

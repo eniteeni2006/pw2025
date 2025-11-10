@@ -22,8 +22,12 @@
                         <td>{{ obj.nota }}</td>
                         <td>{{ obj.post }}</td>
                         <td>
-                            <a href="{% url 'avaliacao_editar' obj.pk %}" class="btn btn-sm btn-warning">Editar</a>
-                            <a href="{% url 'avaliacao_excluir' obj.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                            {% if user.is_authenticated %}
+                                {% if user.is_superuser or user == obj.autor %}
+                                    <a href="{% url 'avaliacao_editar' obj.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                                    <a href="{% url 'avaliacao_excluir' obj.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                                {% endif %}
+                            {% endif %}
                         </td>
                     </tr>
                 {% empty %}

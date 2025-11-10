@@ -1,0 +1,44 @@
+{% extends "paginas/modelo.html" %}
+
+{% block conteudo %}
+    <h3 class="my-4">Lista de Usuários</h3>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">First name</th>
+                    <th scope="col">Last name</th>
+                    <th scope="col">Opções</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in user_list %}
+                    <tr>
+                        <td>{{ obj.username }}</td>
+                        <td>{{ obj.email }}</td>
+                        <td>{{ obj.first_name }}</td>
+                        <td>{{ obj.last_name }}</td>
+                        <td>
+                            {% if request.user.is_authenticated and request.user.is_superuser %}
+                                <a href="{% url 'usuario_editar' obj.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                                {% if request.user.pk != obj.pk %}
+                                    <form action="{% url 'usuario_excluir' obj.pk %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirma exclusão deste usuário?');">Excluir</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">Nenhum usuário encontrado.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock conteudo %}

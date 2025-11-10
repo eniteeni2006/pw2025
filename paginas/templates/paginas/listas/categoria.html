@@ -18,8 +18,10 @@
                     <tr>
                         <td>{{ obj.nome }}</td>
                         <td>
-                            <a href="{% url 'categoria_editar' obj.pk %}" class="btn btn-sm btn-warning">Editar</a>
-                            <a href="{% url 'categoria_excluir' obj.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'categoria_editar' obj.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="{% url 'categoria_excluir' obj.pk %}" class="btn btn-sm btn-danger">Excluir</a>
+                            {% endif %}
                         </td>
                     </tr>
                 {% empty %}

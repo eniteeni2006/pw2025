@@ -1,0 +1,93 @@
+{% extends "paginas/modelo.html" %}
+
+{% block conteudo %}
+<div class="card mt-4">
+    <div class="card-body">
+        <h2 class="card-title">{{ object.titulo }}</h2>
+        <p class="text-muted">Por {{ object.autor }} — {{ object.data|date:"d/m/Y H:i" }} — Categoria: {{ object.categoria }}</p>
+        <p class="card-text">{{ object.texto }}</p>
+        <p>
+            {% if media_avaliacao %}
+                <strong>Média:</strong> {{ media_avaliacao }} / 5
+            {% else %}
+                <em>Nenhuma avaliação ainda.</em>
+            {% endif %}
+        </p>
+        {% if user.is_authenticated %}
+            {% if user.is_superuser or user == object.autor %}
+                <div class="mt-2">
+                    <a href="{% url 'post_editar' object.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                    <form action="{% url 'post_excluir' object.pk %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirma exclusão deste post?');">Excluir</button>
+                    </form>
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <h4>Comentários</h4>
+        {% if comentarios %}
+            <ul class="list-group">
+                {% for c in comentarios %}
+                    <li class="list-group-item">
+                        <strong>{{ c.autor }}</strong> <small class="text-muted">— {{ c.data|date:"d/m/Y H:i" }}</small>
+                        <div>{{ c.comentario }}</div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhum comentário ainda.</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <form action="{% url 'post_comentar' object.pk %}" method="post" class="mt-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="comentario" class="form-label">Seu comentário</label>
+                    <textarea name="comentario" id="comentario" rows="3" class="form-control"></textarea>
+                </div>
+                <button class="btn btn-primary">Publicar Comentário</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}?next={% url 'post_detail' object.pk %}">Faça login</a> para comentar.</p>
+        {% endif %}
+    </div>
+
+    <div class="col-md-6">
+        <h4>Avaliações</h4>
+        {% if avaliacoes %}
+            <ul class="list-group">
+                {% for a in avaliacoes %}
+                    <li class="list-group-item">{{ a.autor }} — Nota: {{ a.nota }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Nenhuma avaliação ainda.</p>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+            <form action="{% url 'post_avaliar' object.pk %}" method="post" class="mt-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="nota" class="form-label">Sua nota (1-5)</label>
+                    <select name="nota" id="nota" class="form-select">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary">Enviar Avaliação</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}?next={% url 'post_detail' object.pk %}">Faça login</a> para avaliar.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock conteudo %}
