@@ -16,9 +16,10 @@ class Categoria(models.Model):
 
 
 class Post(models.Model):
-    titulo = models.CharField(max_length=50)
+    # permitir títulos maiores (até 255 chars) e texto sem limite mínimo/máximo
+    titulo = models.CharField(max_length=255)
     data = models.DateTimeField(auto_now_add=True)
-    texto = models.TextField(max_length=200)
+    texto = models.TextField()
     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT)
     autor = models.ForeignKey(User, on_delete=models.PROTECT)
 
@@ -37,7 +38,8 @@ class Avaliacao(models.Model):
 
 class Comentario(models.Model):
     autor = models.ForeignKey(User, on_delete=models.PROTECT)
-    comentario = models.CharField(max_length=200)
+    # permitir comentários sem limite de comprimento
+    comentario = models.TextField()
     data = models.DateTimeField(auto_now_add=True)
     post = models.ForeignKey(Post, on_delete=models.PROTECT)
 

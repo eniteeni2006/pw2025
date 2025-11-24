@@ -6,7 +6,7 @@
         <div class="row">
         {% for post in post_list %}
             <div class="col-md-6 mb-4">
-                <div class="card h-100">
+                <div class="card h-100" data-href="{% url 'post_detail' post.pk %}">
                     <div class="card-body">
                         <h2 class="card-title">{{ post.titulo }}</h2>
                         <p class="card-text text-muted">Data: {{ post.data|date:"d/m/Y H:i" }} | Autor: {{ post.autor.username }}</p>
@@ -14,8 +14,12 @@
                         <p class="card-text">{{ post.texto|truncatechars:150 }}</p>
                         <div class="d-flex justify-content-between align-items-center mt-3">
                             <div>
-                                <a href="{% url 'post_editar' post.pk %}" class="btn btn-warning btn-sm">Editar</a>
-                                <a href="{% url 'post_excluir' post.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                                {% if user.is_authenticated %}
+                                    {% if user.is_superuser or user == post.autor %}
+                                        <a href="{% url 'post_editar' post.pk %}" class="btn btn-warning btn-sm">Editar</a>
+                                        <a href="{% url 'post_excluir' post.pk %}" class="btn btn-danger btn-sm">Excluir</a>
+                                    {% endif %}
+                                {% endif %}
                             </div>
                         </div>
                     </div>

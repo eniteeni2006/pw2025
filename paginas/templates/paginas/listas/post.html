@@ -19,7 +19,7 @@
             </thead>
             <tbody>
                 {% for obj in object_list %}
-                    <tr>
+                    <tr data-href="{% url 'post_detail' obj.pk %}">
                         <td>{{ obj.titulo }}</td>
                         <td>{{ obj.data|date:"d/m/Y H:i" }}</td>
                         <td>{{ obj.texto|truncatechars:50 }}</td>

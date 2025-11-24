@@ -8,6 +8,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import ListView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
+from django.db.models import Avg
 from django.contrib.auth.models import User
 from .models import Post, Categoria, Comentario, Avaliacao
 from .forms import UsuarioCadastroForm
@@ -16,6 +17,8 @@ class IndexView(ListView):
     model = Post
     template_name = 'paginas/index.html'
     context_object_name = 'post_list'
+    # ordenar por data mais recente e buscar relações para reduzir queries
+    queryset = Post.objects.select_related('autor', 'categoria').order_by('-data')
 
 class SobreView(TemplateView):
     template_name = 'paginas/sobre.html'
@@ -118,9 +121,10 @@ class CategoriaDelete(LoginRequiredMixin, DeleteView):
     template_name = 'paginas/form.html'
     success_url = reverse_lazy('index')
     extra_context = {'titulo': 'Excluir Categoria', 'botao': 'Excluir Categoria'}
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, "Categoria excluída com sucesso!")
-        return super().delete(request, *args, **kwargs)
+    def form_valid(self, form):
+        # chamada durante o fluxo de POST do DeleteView (usa FormMixin)
+        messages.success(self.request, "Categoria excluída com sucesso!")
+        return super().form_valid(form)
 
 class PostDelete(LoginRequiredMixin, DeleteView):
     model = Post
@@ -132,9 +136,10 @@ class PostDelete(LoginRequiredMixin, DeleteView):
         if self.request.user.is_superuser:
             return get_object_or_404(Post, pk=self.kwargs['pk'])
         return get_object_or_404(Post, pk=self.kwargs['pk'], autor=self.request.user)
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, "Post excluído com sucesso!")
-        return super().delete(request, *args, **kwargs)
+    def form_valid(self, form):
+        # usar form_valid em vez de delete para seguir a recomendação do Django
+        messages.success(self.request, "Post excluído com sucesso!")
+        return super().form_valid(form)
     
     def get(self, request, *args, **kwargs):
         # bloquear acesso à página de confirmação para usuários não autorizados
@@ -161,9 +166,9 @@ class AvaliacaoDelete(LoginRequiredMixin, DeleteView):
         if self.request.user.is_superuser:
             return get_object_or_404(Avaliacao, pk=self.kwargs['pk'])
         return get_object_or_404(Avaliacao, pk=self.kwargs['pk'], autor=self.request.user)
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, "Avaliação excluída com sucesso!")
-        return super().delete(request, *args, **kwargs)
+    def form_valid(self, form):
+        messages.success(self.request, "Avaliação excluída com sucesso!")
+        return super().form_valid(form)
 
 class ComentarioDelete(LoginRequiredMixin, DeleteView):
     model = Comentario
@@ -179,6 +184,8 @@ class UsuarioList(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = User
     template_name = 'paginas/listas/usuario.html'
     context_object_name = 'user_list'
+    # ordenar lista de usuários por username
+    ordering = ['username']
 
     def test_func(self):
         return self.request.user.is_superuser
@@ -213,18 +220,22 @@ class UsuarioDelete(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
             return redirect(self.success_url)
         return super().post(request, *args, **kwargs)
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(request, "Usuário excluído com sucesso!")
-        return super().delete(request, *args, **kwargs)
+    def form_valid(self, form):
+        # mensagem exibida após confirmação do formulário de deleção
+        messages.success(self.request, "Usuário excluído com sucesso!")
+        return super().form_valid(form)
 
 class CategoriaList(LoginRequiredMixin, ListView):
     model = Categoria
     template_name = 'paginas/listas/categoria.html'
+    ordering = ['nome']
 
 class PostList(LoginRequiredMixin, ListView):
     model = Post
     template_name = 'paginas/listas/post.html'
     paginate_by = 6
+    # ordenar por data decrescente e reduzir queries com select_related
+    queryset = Post.objects.select_related('autor', 'categoria').order_by('-data')
 
 
 class PostDetailView(TemplateView):
@@ -234,12 +245,12 @@ class PostDetailView(TemplateView):
         context = super().get_context_data(**kwargs)
         pk = self.kwargs.get('pk')
         post = get_object_or_404(Post, pk=pk)
-        comentarios = Comentario.objects.filter(post=post).order_by('-data')
-        avaliacoes = Avaliacao.objects.filter(post=post)
-        # calcular média das avaliações, se existirem
-        media = None
-        if avaliacoes.exists():
-            media = round(sum(a.nota for a in avaliacoes) / avaliacoes.count(), 2)
+        # buscar comentários e avaliações com select_related para evitar N+1
+        comentarios = Comentario.objects.filter(post=post).select_related('autor').order_by('-data')
+        avaliacoes = Avaliacao.objects.filter(post=post).select_related('autor')
+        # calcular média das avaliações no banco de dados
+        media_aggr = avaliacoes.aggregate(avg=Avg('nota'))
+        media = None if media_aggr['avg'] is None else round(media_aggr['avg'], 2)
         context.update({
             'object': post,
             'comentarios': comentarios,
@@ -253,12 +264,17 @@ class PostDetailView(TemplateView):
 def comentar_post(request, pk):
     if request.method == 'POST':
         post = get_object_or_404(Post, pk=pk)
-        texto = request.POST.get('comentario')
-        if texto:
+        texto = request.POST.get('comentario', '') or ''
+        # normalizar espaços e validar
+        texto = texto.strip()
+        MAX_COMMENT_LENGTH = 5000
+        if not texto:
+            messages.error(request, 'Comentário vazio não pode ser criado.')
+        elif len(texto) > MAX_COMMENT_LENGTH:
+            messages.error(request, f'Comentário muito longo (máx. {MAX_COMMENT_LENGTH} caracteres).')
+        else:
             Comentario.objects.create(autor=request.user, comentario=texto, post=post)
             messages.success(request, 'Comentário criado com sucesso!')
-        else:
-            messages.error(request, 'Comentário vazio não pode ser criado.')
     return redirect('post_detail', pk=pk)
 
 

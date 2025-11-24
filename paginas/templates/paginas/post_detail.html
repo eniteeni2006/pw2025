@@ -3,6 +3,10 @@
 {% block conteudo %}
 <div class="card mt-4">
     <div class="card-body">
+        <div class="mb-2">
+            <a href="{% url 'index' %}" class="btn btn-secondary btn-sm me-2" id="voltarBtn"
+               onclick="if(document.referrer){ history.back(); return false; }">← Voltar</a>
+        </div>
         <h2 class="card-title">{{ object.titulo }}</h2>
         <p class="text-muted">Por {{ object.autor }} — {{ object.data|date:"d/m/Y H:i" }} — Categoria: {{ object.categoria }}</p>
         <p class="card-text">{{ object.texto }}</p>
@@ -33,9 +37,22 @@
         {% if comentarios %}
             <ul class="list-group">
                 {% for c in comentarios %}
-                    <li class="list-group-item">
-                        <strong>{{ c.autor }}</strong> <small class="text-muted">— {{ c.data|date:"d/m/Y H:i" }}</small>
-                        <div>{{ c.comentario }}</div>
+                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                        <div>
+                            <strong>{{ c.autor }}</strong> <small class="text-muted">— {{ c.data|date:"d/m/Y H:i" }}</small>
+                            <div>{{ c.comentario }}</div>
+                        </div>
+                        <div>
+                            {% if user.is_authenticated %}
+                                {% if user.is_superuser or user == c.autor %}
+                                    <a href="{% url 'comentario_editar' c.pk %}" class="btn btn-sm btn-warning me-1">Editar</a>
+                                    <form action="{% url 'comentario_excluir' c.pk %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirma exclusão deste comentário?');">Excluir</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </div>
                     </li>
                 {% endfor %}
             </ul>
@@ -44,13 +61,14 @@
         {% endif %}
 
         {% if user.is_authenticated %}
-            <form action="{% url 'post_comentar' object.pk %}" method="post" class="mt-3">
+            <form action="{% url 'post_comentar' object.pk %}" method="post" class="mt-3" id="comentarioForm">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="comentario" class="form-label">Seu comentário</label>
-                    <textarea name="comentario" id="comentario" rows="3" class="form-control"></textarea>
+                    <textarea name="comentario" id="comentario" rows="3" class="form-control" maxlength="5000"></textarea>
+                    <div class="form-text"><span id="charCount">0</span>/5000 caracteres</div>
                 </div>
-                <button class="btn btn-primary">Publicar Comentário</button>
+                <button class="btn btn-primary" id="comentarioSubmit">Publicar Comentário</button>
             </form>
         {% else %}
             <p><a href="{% url 'login' %}?next={% url 'post_detail' object.pk %}">Faça login</a> para comentar.</p>
@@ -62,7 +80,20 @@
         {% if avaliacoes %}
             <ul class="list-group">
                 {% for a in avaliacoes %}
-                    <li class="list-group-item">{{ a.autor }} — Nota: {{ a.nota }}</li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>{{ a.autor }} — Nota: {{ a.nota }}</div>
+                        <div>
+                            {% if user.is_authenticated %}
+                                {% if user.is_superuser or user == a.autor %}
+                                    <a href="{% url 'avaliacao_editar' a.pk %}" class="btn btn-sm btn-warning me-1">Editar</a>
+                                    <form action="{% url 'avaliacao_excluir' a.pk %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Confirma exclusão desta avaliação?');">Excluir</button>
+                                    </form>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </li>
                 {% endfor %}
             </ul>
         {% else %}
@@ -91,3 +122,40 @@
 </div>
 
 {% endblock conteudo %}
+
+{% block extra_scripts %}
+<script>
+    (function(){
+        const textarea = document.getElementById('comentario');
+        if (!textarea) return;
+        const countEl = document.getElementById('charCount');
+        const submitBtn = document.getElementById('comentarioSubmit');
+        const MAX = 5000;
+        function update(){
+            const len = textarea.value.length;
+            countEl.textContent = len;
+            if (len === 0) {
+                // disable submit when empty
+                submitBtn.disabled = true;
+            } else if (len > MAX) {
+                submitBtn.disabled = true;
+                countEl.style.color = 'red';
+            } else {
+                submitBtn.disabled = false;
+                countEl.style.color = '';
+            }
+        }
+        textarea.addEventListener('input', update);
+        // initial
+        update();
+        // prevent submission if only spaces
+        const form = document.getElementById('comentarioForm');
+        form.addEventListener('submit', function(e){
+            if (textarea.value.trim().length === 0) {
+                e.preventDefault();
+                alert('Comentário vazio não pode ser criado.');
+            }
+        });
+    })();
+</script>
+{% endblock extra_scripts %}
